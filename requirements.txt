@@ -1,0 +1,12 @@
+langchain-google-genai
+python-dotenv
+langchain
+langchain_community
+pandas
+pydantic
+langchain-mcp-tools
+mcp 
+openai
+langchain-openai
+azure-devops
+mcp_registry
