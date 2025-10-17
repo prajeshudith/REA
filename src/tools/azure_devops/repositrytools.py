@@ -797,10 +797,11 @@ def create_azdo_repositories_tools(
                 **eval(input_str)
             ),
             description=(
-                "Search for commits in a repository. Input should be a Python dict string with keys: "
+                 "Search for commits in a repository. Input MUST be a Python dictionary string with keys: "
                 "repository_id (required, string), search_text (optional, string), author (optional, string), "
                 "from_date (optional, ISO date string), to_date (optional, ISO date string), max_results (optional, integer, default 50). "
-                "Example: \"{'repository_id': 'my-repo', 'author': 'john@contoso.com', 'max_results': 20}\""
+                "Format: {\"repository_id\": \"value\", \"author\": \"value\", \"max_results\": number}. "
+                "Example: {\"repository_id\": \"my-repo\", \"author\": \"john@contoso.com\", \"max_results\": 20}"
             )
         ),
         

@@ -61,6 +61,14 @@ async def rea_agent(user_prompt: str):
 
     # Get system prompt based on role
     system_prompt = get_role_based_prompt(user_prompt)
+
+    # Additional instructions
+    additional_instructions = """
+    **IMPORTANT INSTRUCTIONS**:
+        1. **CRITICAL**: Always use the 'human_input' tool to get human inputs/approval/suggestions.  
+        2. If you are getting any errors while performing any operations, use the 'human_input' tool to get clarification or more information from the user before proceeding.
+        3. Never end the conversation without confirming with the user using the 'human_input' tool.
+    """
     
     prompt = ChatPromptTemplate.from_messages([
             ("system", system_prompt),
@@ -102,6 +110,3 @@ async def rea_agent(user_prompt: str):
         print(f"Error: {e}")
         import traceback
         traceback.print_exc()
-
-user_prompt = "generate user story for requirement backlog for this team "
-response = asyncio.run(rea_agent(user_prompt))

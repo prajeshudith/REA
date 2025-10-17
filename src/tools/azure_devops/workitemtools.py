@@ -760,10 +760,11 @@ def create_azdo_work_items_tools(
                 **eval(input_str)
             ),
             description=(
-                "Create child work items for a parent work item. Input should be a Python dict string with keys: "
+                "Create child work items for a parent work item. Input MUST be a Python dictionary string with keys: "
                 "parent_id (required, integer), work_item_type (required, e.g., 'Task'), "
                 "titles (required, list of strings). "
-                "Example: \"{'parent_id': 123, 'work_item_type': 'Task', 'titles': ['Task 1', 'Task 2']}\""
+                "Format: {\"parent_id\": number, \"work_item_type\": \"type\", \"titles\": [\"title1\", \"title2\"]}. "
+                "Example: {\"parent_id\": 123, \"work_item_type\": \"Task\", \"titles\": [\"Task 1\", \"Task 2\"]}"
             )
         ),
         
@@ -806,9 +807,10 @@ def create_azdo_work_items_tools(
                 **eval(input_str)
             ),
             description=(
-                "Retrieve work items for a specific backlog. Input should be a Python dict string with keys: "
+                "Retrieve work items for a specific backlog. Input MUST be a Python dictionary string with keys: "
                 "team_name (required, string), backlog_id (required, string). "
-                "Example: \"{'team_name': 'Team A', 'backlog_id': 'Microsoft.RequirementCategory'}\""
+                "Format: {\"team_name\": \"value\", \"backlog_id\": \"value\"}. "
+                "Example: {\"team_name\": \"Team A\", \"backlog_id\": \"Microsoft.RequirementCategory\"}"
             )
         ),
         

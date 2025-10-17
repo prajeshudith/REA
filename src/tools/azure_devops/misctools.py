@@ -581,7 +581,7 @@ class AzureDevOpsAdditionalServicesConnector:
     def list_project_teams(self) -> str:
         """Retrieve a list of teams for the project"""
         try:
-            teams = self.core_client.get_teams(project=self.project_name)
+            teams = self.core_client.get_teams(project_id=self.project_name)
             
             if not teams:
                 return f"No teams found in project '{self.project_name}'"
@@ -980,12 +980,14 @@ def create_azdo_additional_services_tools(
         Tool(
             name="core_get_identity_ids",
             func=lambda input_str: connector.get_identity_ids(
-                eval(input_str) if isinstance(eval(input_str), list) else [input_str]
+                eval(input_str) if isinstance(eval(input_str), list) else [str(input_str)]
             ),
             description=(
                 "Retrieve Azure DevOps identity IDs for a list of unique names. "
-                "Input should be a Python list of usernames/emails or a single string. "
-                "Example: \"['user1@contoso.com', 'user2@contoso.com']\" or \"'user1@contoso.com'\""
+                "Input can be either a JSON array of usernames/emails OR a single string. "
+                "For multiple users, use format: [\"user1@contoso.com\", \"user2@contoso.com\"]. "
+                "For single user, use format: \"user1@contoso.com\". "
+                "Examples: [\"john@contoso.com\", \"jane@contoso.com\"] or \"john@contoso.com\""
             )
         ),
         
