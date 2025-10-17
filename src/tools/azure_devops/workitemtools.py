@@ -917,17 +917,17 @@ def create_azdo_work_items_tools(
     return tools
 
 
-# Example usage
-if __name__ == "__main__":
-    # Create the tools
-    tools = create_azdo_work_items_tools()
+# # Example usage
+# if __name__ == "__main__":
+#     # Create the tools
+#     tools = create_azdo_work_items_tools()
     
-    print(f"Created {len(tools)} Azure DevOps Work Items tools:")
-    for tool in tools:
-        print(f"  - {tool.name}: {tool.description[:80]}...")
+#     print(f"Created {len(tools)} Azure DevOps Work Items tools:")
+#     for tool in tools:
+#         print(f"  - {tool.name}: {tool.description[:80]}...")
     
-    # Example: Get my work items
-    print("\n=== Example: Getting my work items ===")
-    my_work_items_tool = next(t for t in tools if t.name == "wit_my_work_items")
-    result = my_work_items_tool.run("")
-    print(result)
+#     # Example: Get my work items
+#     print("\n=== Example: Getting my work items ===")
+#     my_work_items_tool = next(t for t in tools if t.name == "wit_my_work_items")
+#     result = my_work_items_tool.run("")
+#     print(result)

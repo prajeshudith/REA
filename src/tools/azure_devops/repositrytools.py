@@ -822,17 +822,17 @@ def create_azdo_repositories_tools(
     return tools
 
 
-# Example usage
-if __name__ == "__main__":
-    # Create the tools
-    tools = create_azdo_repositories_tools()
+# # Example usage
+# if __name__ == "__main__":
+#     # Create the tools
+#     tools = create_azdo_repositories_tools()
     
-    print(f"Created {len(tools)} Azure DevOps Repositories tools:")
-    for tool in tools:
-        print(f"  - {tool.name}: {tool.description[:80]}...")
+#     print(f"Created {len(tools)} Azure DevOps Repositories tools:")
+#     for tool in tools:
+#         print(f"  - {tool.name}: {tool.description[:80]}...")
     
-    # Example: List repositories
-    print("\n=== Example: Listing repositories ===")
-    list_repos_tool = next(t for t in tools if t.name == "repo_list_repos_by_project")
-    result = list_repos_tool.run("")
-    print(result)
+#     # Example: List repositories
+#     print("\n=== Example: Listing repositories ===")
+#     list_repos_tool = next(t for t in tools if t.name == "repo_list_repos_by_project")
+#     result = list_repos_tool.run("")
+#     print(result)

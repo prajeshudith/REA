@@ -1029,23 +1029,23 @@ def create_azdo_additional_services_tools(
 
 
 # Example usage
-if __name__ == "__main__":
-    # Create the tools
-    tools = create_azdo_additional_services_tools()
+# if __name__ == "__main__":
+#     # Create the tools
+#     tools = create_azdo_additional_services_tools()
     
-    print(f"Created {len(tools)} Azure DevOps Additional Services tools:")
+#     print(f"Created {len(tools)} Azure DevOps Additional Services tools:")
     
-    # Group tools by category
-    categories = {
-        'Advanced Security': [t for t in tools if t.name.startswith('advsec_')],
-        'Test Plans': [t for t in tools if t.name.startswith('testplan_')],
-        'Wiki': [t for t in tools if t.name.startswith('wiki_')],
-        'Search': [t for t in tools if t.name.startswith('search_')],
-        'Core': [t for t in tools if t.name.startswith('core_')],
-        'Work': [t for t in tools if t.name.startswith('work_')],
-    }
+#     # Group tools by category
+#     categories = {
+#         'Advanced Security': [t for t in tools if t.name.startswith('advsec_')],
+#         'Test Plans': [t for t in tools if t.name.startswith('testplan_')],
+#         'Wiki': [t for t in tools if t.name.startswith('wiki_')],
+#         'Search': [t for t in tools if t.name.startswith('search_')],
+#         'Core': [t for t in tools if t.name.startswith('core_')],
+#         'Work': [t for t in tools if t.name.startswith('work_')],
+#     }
     
-    for category, category_tools in categories.items():
-        print(f"\n{category} ({len(category_tools)} tools):")
-        for tool in category_tools:
-            print(f"  - {tool.name}")
+#     for category, category_tools in categories.items():
+#         print(f"\n{category} ({len(category_tools)} tools):")
+#         for tool in category_tools:
+#             print(f"  - {tool.name}")

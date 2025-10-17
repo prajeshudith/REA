@@ -573,17 +573,17 @@ def create_azdo_pipelines_tools(
     return tools
 
 
-# Example usage
-if __name__ == "__main__":
-    # Create the tools
-    tools = create_azdo_pipelines_tools()
+# # Example usage
+# if __name__ == "__main__":
+#     # Create the tools
+#     tools = create_azdo_pipelines_tools()
     
-    print(f"Created {len(tools)} Azure DevOps Pipelines tools:")
-    for tool in tools:
-        print(f"  - {tool.name}: {tool.description[:80]}...")
+#     print(f"Created {len(tools)} Azure DevOps Pipelines tools:")
+#     for tool in tools:
+#         print(f"  - {tool.name}: {tool.description[:80]}...")
     
-    # Example: Get build definitions
-    print("\n=== Example: Getting build definitions ===")
-    get_definitions_tool = next(t for t in tools if t.name == "pipelines_get_build_definitions")
-    result = get_definitions_tool.run("{}")
-    print(result)
+#     # Example: Get build definitions
+#     print("\n=== Example: Getting build definitions ===")
+#     get_definitions_tool = next(t for t in tools if t.name == "pipelines_get_build_definitions")
+#     result = get_definitions_tool.run("{}")
+#     print(result)
