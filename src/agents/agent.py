@@ -12,6 +12,8 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_community.callbacks import get_openai_callback
 import asyncio
 from src.utils.json_processor import extract_json_from_markdown
+from src.utils.livefile_callbackandler import LiveFileCallbackHandler
+from langchain_core.callbacks import FileCallbackHandler
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 # Initialize the language model
@@ -77,19 +79,33 @@ async def rea_agent(user_prompt: str):
         ])
 
     agent = create_openai_functions_agent(llm, all_tools, prompt)
+    
+    # Use it with your agent
+    handler = LiveFileCallbackHandler("agent_logs.txt")
     agent_executor = AgentExecutor(
         agent=agent,
         tools=all_tools,
         verbose=True,
         handle_parsing_errors=True,
         max_iterations=20,
-        return_intermediate_steps=True
+        return_intermediate_steps=True,
+        callbacks=[handler]
     )
+
+
+
 
     try:
         cost_details = ""
         with get_openai_callback() as cb:
             result = await agent_executor.ainvoke({"input": user_prompt})
+
+            # with FileCallbackHandler("agent_output.log", mode='a') as handler:
+            #     result = agent_executor.invoke(
+            #         {"input": user_prompt},
+            #         config={"callbacks": [handler]}
+            #     )
+
             cost_details += f"""
             {"-"*20}
             Agent execution time: {datetime.now().isoformat()}

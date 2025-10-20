@@ -203,10 +203,12 @@ def create_team_capacity_tools(
             ),
             description=(
                 "Get team member capacities for a specific iteration/sprint. "
-                "Input MUST be a Python dictionary string. "
-                "Format: {\"team_name\": \"value\", \"iteration_name\": \"value\"} "
-                "Example: {\"team_name\": \"ai Team\", \"iteration_name\": \"Sprint 5\"} "
-                "Returns capacity hours per day, activities, and days off."
+                "CRITICAL: Input must be a dictionary string in this EXACT format: "
+                "{'team_name': '<team_name>', 'iteration_name': '<iteration_name>'} "
+                "Replace <team_name> with the actual team name and <iteration_name> with sprint name. "
+                "CORRECT example: {'team_name': 'aimetlab Team', 'iteration_name': 'Sprint 1'} "
+                "WRONG: Just passing team name without dict structure will fail. "
+                "Returns: capacity hours/day, activities, and days off for all team members."
             )
         ),
     ]

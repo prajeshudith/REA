@@ -9,7 +9,7 @@ User Request:
 1. Get the User story/Epic id 3
 2. Check what are the existing task under this
 3. Analyse and find whether anyother tasks can be created
-4. If So breakdown the user story in to further tasks apart from the existing
+4. Only If additional tasks are required so badly, breakdown the user story in to further tasks apart from the existing
 5. Groom the tasks with proper titles, descriptions , acceptance criteria and estimates
 6. Push everything into the Boards with proper title, description, acceptance criteria and estimates
 7. Check the capacity of the team for the current sprint and see if these tasks can be accomodated
