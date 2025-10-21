@@ -28,29 +28,36 @@ def _sync_append_cost(content: str, path: str = "cost_details.txt"):
     with open(path, "a", encoding="utf-8") as f:
         f.write(content)
 
-def get_role_based_prompt(user_input: str) -> str:
+def get_role_based_prompt(user_input: str, role: str = None) -> str:
     """Returns the system prompt based on the selected role."""
-    role_prompt = Role_selection_prompt + "\n\nUser Input:\n{input}"
-    input_prompt = role_prompt.format(input=user_input)
-    response = llm.invoke(input_prompt)
-    role_json = extract_json_from_markdown(response.content)
 
-    if isinstance(role_json, dict) and "Role" in role_json:
-        selected_role = role_json["Role"]
+    if role:
+        selected_role = role
+    else:
+        role_prompt = Role_selection_prompt + "\n\nUser Input:\n{input}"
+        input_prompt = role_prompt.format(input=user_input)
+        response = llm.invoke(input_prompt)
+        role_json = extract_json_from_markdown(response.content)
+
+        if isinstance(role_json, dict) and "Role" in role_json:
+            selected_role = role_json["Role"]
         print(f"Selected Role: {selected_role}")
 
     if selected_role.strip().lower() == "product owner":
         role_prompt = PRODUCT_OWNER
+        print("Product Owner Agent Started...")
     elif selected_role.strip().lower() == "scrum lead":
         role_prompt = SCRUM_LEAD
+        print("Scrum Lead Agent Started...")
     elif selected_role.strip().lower() == "peer review":
         role_prompt = PEER_REVIEWER
+        print("Peer Reviewer Agent Started...")
     else:
         role_prompt = "Invalid role selected. Please choose a valid role."
     
     return role_prompt
 
-async def rea_agent(user_prompt: str):
+async def rea_agent(user_prompt: str, role: str = None):
     """Sets up and returns an REA agent executor with Azure DevOps and local file operation tools."""
     print("Setting up REA agent...")
     
@@ -62,7 +69,7 @@ async def rea_agent(user_prompt: str):
     print(f"Total tools available: {len(all_tools)}")
 
     # Get system prompt based on role
-    system_prompt = get_role_based_prompt(user_prompt)
+    system_prompt = get_role_based_prompt(user_prompt, role)
 
     # Additional instructions
     additional_instructions = """
@@ -81,6 +88,10 @@ async def rea_agent(user_prompt: str):
     agent = create_openai_functions_agent(llm, all_tools, prompt)
     
     # Use it with your agent
+    with open("agent_logs.txt", "a", encoding="utf-8") as log_file:
+        log_file.write(f"\n\n{'-'*20}\n{role or 'No Role Specified'} Agent started at {datetime.now().isoformat()}\n{'-'*20}\n")
+        log_file.flush()
+
     handler = LiveFileCallbackHandler("agent_logs.txt")
     agent_executor = AgentExecutor(
         agent=agent,
