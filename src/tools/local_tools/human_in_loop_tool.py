@@ -1,4 +1,5 @@
 from langchain.tools import StructuredTool
+import time
 
 def request_human_approval(operation_details: str) -> str:
     """
@@ -16,6 +17,7 @@ def request_human_approval(operation_details: str) -> str:
     Returns:
         str: "APPROVED" if user approves, "REJECTED" if user rejects with reason
     """
+    time.sleep(5)  # To avoid rate limiting
     print("\n" + "="*70)
     print("🤖 AGENT QUESTION")
     print("="*70)

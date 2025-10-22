@@ -17,6 +17,7 @@ from azure.devops.v7_0.git.models import (
     GitRef
 )
 import json
+import time
 
 load_dotenv()
 
@@ -39,6 +40,7 @@ class AzureDevOpsRepositoriesConnector:
     def list_repos_by_project(self) -> str:
         """Retrieve a list of repositories for a given project"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             repos = self.git_client.get_repositories(project=self.project_name)
             
             if not repos:
@@ -62,6 +64,7 @@ class AzureDevOpsRepositoriesConnector:
                                                status: str = "active") -> str:
         """Retrieve a list of pull requests for a given repository or project"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Create search criteria
             search_criteria = GitPullRequestSearchCriteria()
             if status.lower() == "active":
@@ -109,6 +112,7 @@ class AzureDevOpsRepositoriesConnector:
     def list_branches_by_repo(self, repository_id: str) -> str:
         """Retrieve a list of branches for a given repository"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             refs = self.git_client.get_refs(
                 repository_id=repository_id,
                 project=self.project_name,
@@ -133,6 +137,7 @@ class AzureDevOpsRepositoriesConnector:
     def list_my_branches_by_repo(self, repository_id: str) -> str:
         """Retrieve a list of your branches for a given repository"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Get current user's identity
             connection_data = self.connection.get_connection_data()
             user_id = connection_data.authenticated_user.id
@@ -163,6 +168,7 @@ class AzureDevOpsRepositoriesConnector:
     def list_pull_requests_by_commits(self, repository_id: str, commit_ids: List[str]) -> str:
         """List pull requests associated with commits"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             all_prs = []
             
             for commit_id in commit_ids:
@@ -189,6 +195,7 @@ class AzureDevOpsRepositoriesConnector:
     def list_pull_request_threads(self, repository_id: str, pull_request_id: int) -> str:
         """Retrieve a list of comment threads for a pull request"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             threads = self.git_client.get_threads(
                 repository_id=repository_id,
                 pull_request_id=pull_request_id,
@@ -216,6 +223,7 @@ class AzureDevOpsRepositoriesConnector:
                                           pull_request_id: int, thread_id: int) -> str:
         """Retrieve a list of comments in a pull request thread"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             comments = self.git_client.get_comments(
                 repository_id=repository_id,
                 pull_request_id=pull_request_id,
@@ -242,6 +250,7 @@ class AzureDevOpsRepositoriesConnector:
     def get_repo_by_name_or_id(self, repository_name_or_id: str) -> str:
         """Get the repository by project and repository name or ID"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             repo = self.git_client.get_repository(
                 repository_id=repository_name_or_id,
                 project=self.project_name
@@ -264,6 +273,7 @@ class AzureDevOpsRepositoriesConnector:
     def get_branch_by_name(self, repository_id: str, branch_name: str) -> str:
         """Get a branch by its name"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Ensure branch name has proper prefix
             if not branch_name.startswith("refs/heads/"):
                 branch_name = f"refs/heads/{branch_name}"
@@ -300,6 +310,7 @@ class AzureDevOpsRepositoriesConnector:
     def get_pull_request_by_id(self, repository_id: str, pull_request_id: int) -> str:
         """Get a pull request by its ID"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             pr = self.git_client.get_pull_request(
                 repository_id=repository_id,
                 pull_request_id=pull_request_id,
@@ -334,6 +345,7 @@ class AzureDevOpsRepositoriesConnector:
                            is_draft: bool = False, reviewers: List[str] = None) -> str:
         """Create a new pull request"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Ensure branch names have proper format
             if not source_branch.startswith("refs/heads/"):
                 source_branch = f"refs/heads/{source_branch}"
@@ -370,6 +382,7 @@ class AzureDevOpsRepositoriesConnector:
                      base_commit_id: str) -> str:
         """Create a new branch in the repository"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Ensure branch name has proper format
             if not branch_name.startswith("refs/heads/"):
                 branch_name = f"refs/heads/{branch_name}"
@@ -401,6 +414,7 @@ class AzureDevOpsRepositoriesConnector:
                            is_draft: bool = None, target_branch: str = None) -> str:
         """Update various fields of an existing pull request"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Get existing PR
             existing_pr = self.git_client.get_pull_request(
                 repository_id=repository_id,
@@ -441,6 +455,7 @@ class AzureDevOpsRepositoriesConnector:
                                       remove_reviewers: List[str] = None) -> str:
         """Add or remove reviewers for an existing pull request"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             results = []
             
             # Add reviewers
@@ -475,6 +490,7 @@ class AzureDevOpsRepositoriesConnector:
                         thread_id: int, comment_text: str) -> str:
         """Reply to a specific comment on a pull request"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             comment = Comment(content=comment_text, comment_type=1)
             
             created_comment = self.git_client.create_comment(
@@ -495,6 +511,7 @@ class AzureDevOpsRepositoriesConnector:
                        thread_id: int) -> str:
         """Resolve a specific comment thread on a pull request"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Get the thread
             thread = self.git_client.get_pull_request_thread(
                 repository_id=repository_id,
@@ -523,6 +540,7 @@ class AzureDevOpsRepositoriesConnector:
                       to_date: str = None, max_results: int = 50) -> str:
         """Search for commits"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             search_criteria = GitQueryCommitsCriteria()
             
             if author:
@@ -560,6 +578,7 @@ class AzureDevOpsRepositoriesConnector:
                                    line_number: int = None) -> str:
         """Create a new comment thread on a pull request"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Create comment
             comment = Comment(content=comment_text, comment_type=1)
             

@@ -25,7 +25,7 @@ def get_azdo_tool_kit():
     # Add Azure DevOps tools
     tools.extend(create_azdo_work_items_tools(organization_url, personal_access_token, project_name))
     tools.extend(create_azdo_repositories_tools(organization_url, personal_access_token, project_name))
-    tools.extend(create_azdo_pipelines_tools(organization_url, personal_access_token, project_name))
+    # tools.extend(create_azdo_pipelines_tools(organization_url, personal_access_token, project_name))
     tools.extend(create_azdo_additional_services_tools(organization_url, personal_access_token, project_name))
     tools.extend(create_team_capacity_tools(organization_url, personal_access_token, project_name))
     return tools

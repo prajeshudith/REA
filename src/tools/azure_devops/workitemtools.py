@@ -13,7 +13,7 @@ from azure.devops.v7_0.work_item_tracking.models import (
 )
 from azure.devops.v7_0.work.models import TeamContext
 import json
-
+import time
 load_dotenv()
 
 # Configuration
@@ -36,6 +36,7 @@ class AzureDevOpsWorkItemsConnector:
     def my_work_items(self, max_results: int = 50) -> str:
         """Retrieve work items relevant to the authenticated user"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Query for work items assigned to the current user
             wiql_query = f"""
             SELECT [System.Id], [System.Title], [System.State], 
@@ -72,6 +73,7 @@ class AzureDevOpsWorkItemsConnector:
     def get_work_item(self, work_item_id: int) -> str:
         """Get a single work item by ID"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             work_item = self.wit_client.get_work_item(
                 id=work_item_id,
                 expand='All'
@@ -103,6 +105,7 @@ class AzureDevOpsWorkItemsConnector:
     def get_work_items_batch(self, work_item_ids: List[int]) -> str:
         """Retrieve multiple work items by IDs in batch"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             if not work_item_ids:
                 return "No work item IDs provided."
             
@@ -130,6 +133,7 @@ class AzureDevOpsWorkItemsConnector:
                         tags: str = "", priority: int = 2) -> str:
         """Create a new work item"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             document = []
             
             # Add title
@@ -183,6 +187,7 @@ class AzureDevOpsWorkItemsConnector:
     def update_work_item(self, work_item_id: int, updates: Dict[str, Any]) -> str:
         """Update a work item with specified fields"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             document = []
             
             for field_path, value in updates.items():
@@ -209,6 +214,7 @@ class AzureDevOpsWorkItemsConnector:
     def add_work_item_comment(self, work_item_id: int, comment_text: str) -> str:
         """Add a comment to a work item"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             comment = CommentCreate(text=comment_text)
             result = self.wit_client.add_comment(
                 project=self.project_name,
@@ -223,6 +229,7 @@ class AzureDevOpsWorkItemsConnector:
     def list_work_item_comments(self, work_item_id: int) -> str:
         """Retrieve comments for a work item"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             comments = self.wit_client.get_comments(
                 project=self.project_name,
                 work_item_id=work_item_id
@@ -247,6 +254,7 @@ class AzureDevOpsWorkItemsConnector:
                             titles: List[str]) -> str:
         """Create child work items for a parent work item"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             results = []
             for title in titles:
                 # Create the child work item
@@ -292,6 +300,7 @@ class AzureDevOpsWorkItemsConnector:
                        link_type: str = "System.LinkTypes.Related") -> str:
         """Link two work items together"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             document = [
                 JsonPatchOperation(
                     op="add",
@@ -316,6 +325,7 @@ class AzureDevOpsWorkItemsConnector:
     def get_work_items_for_iteration(self, team_name: str, iteration_path: str) -> str:
         """Retrieve work items for a specific iteration"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             wiql_query = f"""
             SELECT [System.Id], [System.Title], [System.State], 
                    [System.WorkItemType], [System.AssignedTo]
@@ -348,6 +358,7 @@ class AzureDevOpsWorkItemsConnector:
     def list_backlogs(self, team_name: str) -> str:
         """Retrieve backlogs for a team"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             team_context = TeamContext(project=self.project_name, team=team_name)
             backlogs = self.work_client.get_backlogs(team_context)
             
@@ -366,6 +377,7 @@ class AzureDevOpsWorkItemsConnector:
     def get_backlog_work_items(self, team_name: str, backlog_id: str) -> str:
         """Retrieve work items for a specific backlog"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             team_context = TeamContext(project=self.project_name, team=team_name)
             backlog_items = self.work_client.get_backlog_level_work_items(
                 team_context=team_context,
@@ -394,6 +406,7 @@ class AzureDevOpsWorkItemsConnector:
     def query_work_items(self, wiql_query: str) -> str:
         """Execute a WIQL query to retrieve work items"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             wiql = Wiql(query=wiql_query)
             query_results = self.wit_client.query_by_wiql(wiql).work_items
             
@@ -417,6 +430,7 @@ class AzureDevOpsWorkItemsConnector:
                                        repository_id: str) -> str:
         """Link a work item to a pull request"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Construct the PR artifact URL
             pr_url = f"vstfs:///Git/PullRequestId/{self.project_name}%2F{repository_id}%2F{pull_request_id}"
             
@@ -447,6 +461,7 @@ class AzureDevOpsWorkItemsConnector:
     def get_work_item_type(self, work_item_type_name: str) -> str:
         """Get a specific work item type definition"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             work_item_type = self.wit_client.get_work_item_type(
                 project=self.project_name,
                 type=work_item_type_name
@@ -475,6 +490,7 @@ class AzureDevOpsWorkItemsConnector:
     def get_query(self, query_id_or_path: str) -> str:
         """Get a saved query by its ID or path"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Try to get by ID first, then by path
             try:
                 query = self.wit_client.get_query(
@@ -503,6 +519,7 @@ class AzureDevOpsWorkItemsConnector:
     def get_query_results_by_id(self, query_id: str) -> str:
         """Execute a saved query and retrieve results"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Get the query first
             query = self.wit_client.get_query(
                 project=self.project_name,
@@ -533,6 +550,7 @@ class AzureDevOpsWorkItemsConnector:
     def update_work_items_batch(self, updates_list: List[Dict[str, Any]]) -> str:
         """Update multiple work items in batch"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             results = []
             
             for update_item in updates_list:
@@ -565,6 +583,7 @@ class AzureDevOpsWorkItemsConnector:
     def work_items_link_batch(self, links: List[Dict[str, Any]]) -> str:
         """Link multiple work items together in batch"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             results = []
             
             for link in links:
@@ -598,6 +617,7 @@ class AzureDevOpsWorkItemsConnector:
     def work_item_unlink(self, work_item_id: int, link_indices: List[int]) -> str:
         """Unlink one or many links from a work item"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # First get the work item to see its relations
             work_item = self.wit_client.get_work_item(
                 id=work_item_id,
@@ -633,6 +653,7 @@ class AzureDevOpsWorkItemsConnector:
                          artifact_id: str, artifact_name: str = "") -> str:
         """Link to artifacts like branch, pull request, commit, and build"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Construct artifact URL based on type
             artifact_urls = {
                 "branch": f"vstfs:///Git/Ref/{self.project_name}%2F{artifact_id}",

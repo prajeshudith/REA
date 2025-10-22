@@ -5,6 +5,7 @@ from langchain.tools import Tool
 from azure.devops.connection import Connection
 from msrest.authentication import BasicAuthentication
 from azure.devops.v7_0.work.models import TeamContext
+import time
 
 load_dotenv()
 
@@ -37,6 +38,7 @@ class AzureDevOpsTeamCapacityConnector:
         """
         try:
             # Get team members
+            time.sleep(5)  # To avoid rate limiting
             team_members = self.core_client.get_team_members_with_extended_properties(
                 project_id=self.project_name,
                 team_id=team_name
@@ -76,6 +78,7 @@ class AzureDevOpsTeamCapacityConnector:
             Iteration GUID or None if not found
         """
         try:
+            time.sleep(5)  # To avoid rate limiting
             team_context = TeamContext(project=self.project_name, team=team_name)
             
             # Get all iterations for the team
@@ -104,6 +107,7 @@ class AzureDevOpsTeamCapacityConnector:
             Formatted string with capacity details for each team member
         """
         try:
+            time.sleep(5)  # To avoid rate limiting
             # First, get the iteration GUID from the name
             iteration_id = self.get_iteration_id(team_name, iteration_name)
             

@@ -1,10 +1,12 @@
 import os
 from typing import Optional
 from langchain.tools import StructuredTool
+import time
 
 # ------------------------------- Helper Functions -------------------------------
 def write_file(path: str, content: str) -> str:
     """Writes or creates a file in the local system."""
+    time.sleep(5)  # To avoid rate limiting
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
 
     with open(path, "w", encoding="utf-8") as f:
@@ -16,6 +18,7 @@ def write_file(path: str, content: str) -> str:
 def read_file(path: str) -> str:
     """Reads a file from the local system."""
     try:
+        time.sleep(5)  # To avoid rate limiting
         with open(path, "r", encoding="utf-8") as f:
             content = f.read()
         return content
@@ -29,6 +32,7 @@ def list_files_in_root(folders_to_omit: list) -> str:
     """Lists all files in the root directory and with all the files inside the subdirectories with their paths.
     Should not include the files in given folders_to_omit.
     All the paths should have '/' for directory separator."""
+    time.sleep(5)  # To avoid rate limiting
     file_list = []
     for root, dirs, files in os.walk("."):
         for file in files:

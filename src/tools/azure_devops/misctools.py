@@ -1,3 +1,4 @@
+import time
 import os
 from typing import List, Dict, Optional, Any
 from dotenv import load_dotenv
@@ -581,6 +582,7 @@ class AzureDevOpsAdditionalServicesConnector:
     def list_project_teams(self) -> str:
         """Retrieve a list of teams for the project"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             teams = self.core_client.get_teams(project_id=self.project_name)
             
             if not teams:
@@ -600,6 +602,7 @@ class AzureDevOpsAdditionalServicesConnector:
     def list_projects(self) -> str:
         """Retrieve a list of projects in the organization"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             projects = self.core_client.get_projects()
             
             if not projects:
@@ -622,6 +625,7 @@ class AzureDevOpsAdditionalServicesConnector:
     def get_identity_ids(self, unique_names: List[str]) -> str:
         """Retrieve Azure DevOps identity IDs for a list of unique names"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             result = f"Identity IDs for {len(unique_names)} users:\n\n"
             
             for name in unique_names:
@@ -653,6 +657,7 @@ class AzureDevOpsAdditionalServicesConnector:
     def list_team_iterations(self, team_name: str) -> str:
         """Retrieve iterations for a team"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             team_context = TeamContext(project=self.project_name, team=team_name)
             iterations = self.work_client.get_team_iterations(team_context=team_context)
             
@@ -677,6 +682,7 @@ class AzureDevOpsAdditionalServicesConnector:
                          finish_date: str, path: str = None) -> str:
         """Create new iterations in the project"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             # Use work item tracking client to create iteration path
             full_path = f"{self.project_name}\\Iteration"
             if path:
@@ -706,6 +712,7 @@ class AzureDevOpsAdditionalServicesConnector:
     def assign_iterations(self, team_name: str, iteration_path: str) -> str:
         """Assign existing iterations to a team"""
         try:
+            time.sleep(5)  # To avoid rate limiting
             team_context = TeamContext(project=self.project_name, team=team_name)
             
             iteration = TeamSettingsIteration()
@@ -743,226 +750,226 @@ def create_azdo_additional_services_tools(
     
     tools = [
         # ========== Advanced Security ==========
-        Tool(
-            name="advsec_get_alerts",
-            func=lambda input_str: connector.get_alerts(
-                **eval(input_str) if input_str.strip() else {}
-            ),
-            description=(
-                "Retrieve Advanced Security alerts for a repository. Input should be a Python dict string with keys: "
-                "repository_id (required, string), criteria (optional, dict). "
-                "Example: \"{'repository_id': 'my-repo'}\""
-            )
-        ),
+        # Tool(
+        #     name="advsec_get_alerts",
+        #     func=lambda input_str: connector.get_alerts(
+        #         **eval(input_str) if input_str.strip() else {}
+        #     ),
+        #     description=(
+        #         "Retrieve Advanced Security alerts for a repository. Input should be a Python dict string with keys: "
+        #         "repository_id (required, string), criteria (optional, dict). "
+        #         "Example: \"{'repository_id': 'my-repo'}\""
+        #     )
+        # ),
         
-        Tool(
-            name="advsec_get_alert_details",
-            func=lambda input_str: connector.get_alert_details(
-                **eval(input_str)
-            ),
-            description=(
-                "Get detailed information about a specific Advanced Security alert. Input should be a Python dict string with keys: "
-                "repository_id (required, string), alert_id (required, integer). "
-                "Example: \"{'repository_id': 'my-repo', 'alert_id': 123}\""
-            )
-        ),
+        # Tool(
+        #     name="advsec_get_alert_details",
+        #     func=lambda input_str: connector.get_alert_details(
+        #         **eval(input_str)
+        #     ),
+        #     description=(
+        #         "Get detailed information about a specific Advanced Security alert. Input should be a Python dict string with keys: "
+        #         "repository_id (required, string), alert_id (required, integer). "
+        #         "Example: \"{'repository_id': 'my-repo', 'alert_id': 123}\""
+        #     )
+        # ),
         
-        # ========== Test Plans ==========
-        Tool(
-            name="testplan_create_test_plan",
-            func=lambda input_str: connector.create_test_plan(
-                **eval(input_str)
-            ),
-            description=(
-                "Create a new test plan. Input should be a Python dict string with keys: "
-                "name (required, string), area_path (optional, string), iteration_path (optional, string), "
-                "description (optional, string). "
-                "Example: \"{'name': 'Sprint 1 Tests', 'area_path': 'Project\\Area', 'description': 'Test plan for sprint 1'}\""
-            )
-        ),
+        # # ========== Test Plans ==========
+        # Tool(
+        #     name="testplan_create_test_plan",
+        #     func=lambda input_str: connector.create_test_plan(
+        #         **eval(input_str)
+        #     ),
+        #     description=(
+        #         "Create a new test plan. Input should be a Python dict string with keys: "
+        #         "name (required, string), area_path (optional, string), iteration_path (optional, string), "
+        #         "description (optional, string). "
+        #         "Example: \"{'name': 'Sprint 1 Tests', 'area_path': 'Project\\Area', 'description': 'Test plan for sprint 1'}\""
+        #     )
+        # ),
         
-        Tool(
-            name="testplan_create_test_case",
-            func=lambda input_str: connector.create_test_case(
-                **eval(input_str)
-            ),
-            description=(
-                "Create a new test case work item. Input should be a Python dict string with keys: "
-                "title (required, string), steps (optional, list of dicts with 'action' and 'expected' keys), "
-                "area_path (optional, string), priority (optional, integer, default 2). "
-                "Example: \"{'title': 'Login Test', 'steps': [{'action': 'Enter username', 'expected': 'Username accepted'}], 'priority': 1}\""
-            )
-        ),
+        # Tool(
+        #     name="testplan_create_test_case",
+        #     func=lambda input_str: connector.create_test_case(
+        #         **eval(input_str)
+        #     ),
+        #     description=(
+        #         "Create a new test case work item. Input should be a Python dict string with keys: "
+        #         "title (required, string), steps (optional, list of dicts with 'action' and 'expected' keys), "
+        #         "area_path (optional, string), priority (optional, integer, default 2). "
+        #         "Example: \"{'title': 'Login Test', 'steps': [{'action': 'Enter username', 'expected': 'Username accepted'}], 'priority': 1}\""
+        #     )
+        # ),
         
-        Tool(
-            name="testplan_update_test_case_steps",
-            func=lambda input_str: connector.update_test_case_steps(
-                **eval(input_str)
-            ),
-            description=(
-                "Update an existing test case's steps. Input should be a Python dict string with keys: "
-                "test_case_id (required, integer), steps (required, list of dicts with 'action' and 'expected' keys). "
-                "Example: \"{'test_case_id': 123, 'steps': [{'action': 'Click button', 'expected': 'Page loads'}]}\""
-            )
-        ),
+        # Tool(
+        #     name="testplan_update_test_case_steps",
+        #     func=lambda input_str: connector.update_test_case_steps(
+        #         **eval(input_str)
+        #     ),
+        #     description=(
+        #         "Update an existing test case's steps. Input should be a Python dict string with keys: "
+        #         "test_case_id (required, integer), steps (required, list of dicts with 'action' and 'expected' keys). "
+        #         "Example: \"{'test_case_id': 123, 'steps': [{'action': 'Click button', 'expected': 'Page loads'}]}\""
+        #     )
+        # ),
         
-        Tool(
-            name="testplan_add_test_cases_to_suite",
-            func=lambda input_str: connector.add_test_cases_to_suite(
-                **eval(input_str)
-            ),
-            description=(
-                "Add existing test cases to a test suite. Input should be a Python dict string with keys: "
-                "plan_id (required, integer), suite_id (required, integer), test_case_ids (required, list of integers). "
-                "Example: \"{'plan_id': 1, 'suite_id': 2, 'test_case_ids': [123, 456, 789]}\""
-            )
-        ),
+        # Tool(
+        #     name="testplan_add_test_cases_to_suite",
+        #     func=lambda input_str: connector.add_test_cases_to_suite(
+        #         **eval(input_str)
+        #     ),
+        #     description=(
+        #         "Add existing test cases to a test suite. Input should be a Python dict string with keys: "
+        #         "plan_id (required, integer), suite_id (required, integer), test_case_ids (required, list of integers). "
+        #         "Example: \"{'plan_id': 1, 'suite_id': 2, 'test_case_ids': [123, 456, 789]}\""
+        #     )
+        # ),
         
-        Tool(
-            name="testplan_list_test_plans",
-            func=lambda input_str: connector.list_test_plans(
-                **eval(input_str) if input_str.strip() else {}
-            ),
-            description=(
-                "Retrieve a paginated list of test plans. Input should be a Python dict string with keys: "
-                "active_only (optional, boolean, default True), detailed (optional, boolean, default False). "
-                "Example: \"{'active_only': True, 'detailed': True}\" or \"{}\" for active plans"
-            )
-        ),
+        # Tool(
+        #     name="testplan_list_test_plans",
+        #     func=lambda input_str: connector.list_test_plans(
+        #         **eval(input_str) if input_str.strip() else {}
+        #     ),
+        #     description=(
+        #         "Retrieve a paginated list of test plans. Input should be a Python dict string with keys: "
+        #         "active_only (optional, boolean, default True), detailed (optional, boolean, default False). "
+        #         "Example: \"{'active_only': True, 'detailed': True}\" or \"{}\" for active plans"
+        #     )
+        # ),
         
-        Tool(
-            name="testplan_list_test_cases",
-            func=lambda input_str: connector.list_test_cases(
-                **eval(input_str)
-            ),
-            description=(
-                "Get test cases in a test plan. Input should be a Python dict string with keys: "
-                "plan_id (required, integer), suite_id (optional, integer - if not provided, returns all test cases). "
-                "Example: \"{'plan_id': 1, 'suite_id': 2}\" or \"{'plan_id': 1}\""
-            )
-        ),
+        # Tool(
+        #     name="testplan_list_test_cases",
+        #     func=lambda input_str: connector.list_test_cases(
+        #         **eval(input_str)
+        #     ),
+        #     description=(
+        #         "Get test cases in a test plan. Input should be a Python dict string with keys: "
+        #         "plan_id (required, integer), suite_id (optional, integer - if not provided, returns all test cases). "
+        #         "Example: \"{'plan_id': 1, 'suite_id': 2}\" or \"{'plan_id': 1}\""
+        #     )
+        # ),
         
-        Tool(
-            name="testplan_show_test_results_from_build_id",
-            func=lambda build_id: connector.show_test_results_from_build_id(int(build_id)),
-            description=(
-                "Get test results for a given build ID. Input should be the build ID (integer). "
-                "Returns summary and detailed results."
-            )
-        ),
+        # Tool(
+        #     name="testplan_show_test_results_from_build_id",
+        #     func=lambda build_id: connector.show_test_results_from_build_id(int(build_id)),
+        #     description=(
+        #         "Get test results for a given build ID. Input should be the build ID (integer). "
+        #         "Returns summary and detailed results."
+        #     )
+        # ),
         
-        Tool(
-            name="testplan_create_test_suite",
-            func=lambda input_str: connector.create_test_suite(
-                **eval(input_str)
-            ),
-            description=(
-                "Create a new test suite in a test plan. Input should be a Python dict string with keys: "
-                "plan_id (required, integer), suite_name (required, string), "
-                "parent_suite_id (optional, integer), suite_type (optional, string, default 'StaticTestSuite'). "
-                "Example: \"{'plan_id': 1, 'suite_name': 'Regression Tests', 'suite_type': 'StaticTestSuite'}\""
-            )
-        ),
+        # Tool(
+        #     name="testplan_create_test_suite",
+        #     func=lambda input_str: connector.create_test_suite(
+        #         **eval(input_str)
+        #     ),
+        #     description=(
+        #         "Create a new test suite in a test plan. Input should be a Python dict string with keys: "
+        #         "plan_id (required, integer), suite_name (required, string), "
+        #         "parent_suite_id (optional, integer), suite_type (optional, string, default 'StaticTestSuite'). "
+        #         "Example: \"{'plan_id': 1, 'suite_name': 'Regression Tests', 'suite_type': 'StaticTestSuite'}\""
+        #     )
+        # ),
         
-        # ========== Wiki ==========
-        Tool(
-            name="wiki_list_wikis",
-            func=lambda x: connector.list_wikis(),
-            description="Retrieve a list of wikis for the project. No input required."
-        ),
+        # # ========== Wiki ==========
+        # Tool(
+        #     name="wiki_list_wikis",
+        #     func=lambda x: connector.list_wikis(),
+        #     description="Retrieve a list of wikis for the project. No input required."
+        # ),
         
-        Tool(
-            name="wiki_get_wiki",
-            func=lambda wiki_identifier: connector.get_wiki(wiki_identifier),
-            description="Get wiki by identifier. Input should be the wiki ID or name (string)."
-        ),
+        # Tool(
+        #     name="wiki_get_wiki",
+        #     func=lambda wiki_identifier: connector.get_wiki(wiki_identifier),
+        #     description="Get wiki by identifier. Input should be the wiki ID or name (string)."
+        # ),
         
-        Tool(
-            name="wiki_list_pages",
-            func=lambda input_str: connector.list_pages(
-                **eval(input_str)
-            ),
-            description=(
-                "Retrieve wiki pages for a specific wiki. Input should be a Python dict string with keys: "
-                "wiki_identifier (required, string), path (optional, string, default '/'). "
-                "Example: \"{'wiki_identifier': 'MyWiki', 'path': '/Documentation'}\""
-            )
-        ),
+        # Tool(
+        #     name="wiki_list_pages",
+        #     func=lambda input_str: connector.list_pages(
+        #         **eval(input_str)
+        #     ),
+        #     description=(
+        #         "Retrieve wiki pages for a specific wiki. Input should be a Python dict string with keys: "
+        #         "wiki_identifier (required, string), path (optional, string, default '/'). "
+        #         "Example: \"{'wiki_identifier': 'MyWiki', 'path': '/Documentation'}\""
+        #     )
+        # ),
         
-        Tool(
-            name="wiki_get_page",
-            func=lambda input_str: connector.get_page(
-                **eval(input_str)
-            ),
-            description=(
-                "Retrieve wiki page metadata by path. Input should be a Python dict string with keys: "
-                "wiki_identifier (required, string), page_path (required, string). "
-                "Example: \"{'wiki_identifier': 'MyWiki', 'page_path': '/Getting-Started'}\""
-            )
-        ),
+        # Tool(
+        #     name="wiki_get_page",
+        #     func=lambda input_str: connector.get_page(
+        #         **eval(input_str)
+        #     ),
+        #     description=(
+        #         "Retrieve wiki page metadata by path. Input should be a Python dict string with keys: "
+        #         "wiki_identifier (required, string), page_path (required, string). "
+        #         "Example: \"{'wiki_identifier': 'MyWiki', 'page_path': '/Getting-Started'}\""
+        #     )
+        # ),
         
-        Tool(
-            name="wiki_get_page_content",
-            func=lambda input_str: connector.get_page_content(
-                **eval(input_str)
-            ),
-            description=(
-                "Retrieve wiki page content by path. Input should be a Python dict string with keys: "
-                "wiki_identifier (required, string), page_path (required, string). "
-                "Example: \"{'wiki_identifier': 'MyWiki', 'page_path': '/Getting-Started'}\""
-            )
-        ),
+        # Tool(
+        #     name="wiki_get_page_content",
+        #     func=lambda input_str: connector.get_page_content(
+        #         **eval(input_str)
+        #     ),
+        #     description=(
+        #         "Retrieve wiki page content by path. Input should be a Python dict string with keys: "
+        #         "wiki_identifier (required, string), page_path (required, string). "
+        #         "Example: \"{'wiki_identifier': 'MyWiki', 'page_path': '/Getting-Started'}\""
+        #     )
+        # ),
         
-        Tool(
-            name="wiki_create_or_update_page",
-            func=lambda input_str: connector.create_or_update_page(
-                **eval(input_str)
-            ),
-            description=(
-                "Create or update wiki pages with full content support. Input should be a Python dict string with keys: "
-                "wiki_identifier (required, string), page_path (required, string), "
-                "content (required, string - markdown content), comment (optional, string - commit message). "
-                "Example: \"{'wiki_identifier': 'MyWiki', 'page_path': '/New-Page', "
-                "'content': '# Title\\\\nContent here', 'comment': 'Initial version'}\""
-            )
-        ),
+        # Tool(
+        #     name="wiki_create_or_update_page",
+        #     func=lambda input_str: connector.create_or_update_page(
+        #         **eval(input_str)
+        #     ),
+        #     description=(
+        #         "Create or update wiki pages with full content support. Input should be a Python dict string with keys: "
+        #         "wiki_identifier (required, string), page_path (required, string), "
+        #         "content (required, string - markdown content), comment (optional, string - commit message). "
+        #         "Example: \"{'wiki_identifier': 'MyWiki', 'page_path': '/New-Page', "
+        #         "'content': '# Title\\\\nContent here', 'comment': 'Initial version'}\""
+        #     )
+        # ),
         
-        # ========== Search ==========
-        Tool(
-            name="search_code",
-            func=lambda input_str: connector.search_code(
-                **eval(input_str) if isinstance(eval(input_str), dict) else {'search_text': input_str}
-            ),
-            description=(
-                "Get code search results. Input should be a Python dict string with keys: "
-                "search_text (required, string), top (optional, integer, default 50). "
-                "Example: \"{'search_text': 'function myFunc', 'top': 20}\" or just \"'myFunc'\""
-            )
-        ),
+        # # ========== Search ==========
+        # Tool(
+        #     name="search_code",
+        #     func=lambda input_str: connector.search_code(
+        #         **eval(input_str) if isinstance(eval(input_str), dict) else {'search_text': input_str}
+        #     ),
+        #     description=(
+        #         "Get code search results. Input should be a Python dict string with keys: "
+        #         "search_text (required, string), top (optional, integer, default 50). "
+        #         "Example: \"{'search_text': 'function myFunc', 'top': 20}\" or just \"'myFunc'\""
+        #     )
+        # ),
         
-        Tool(
-            name="search_wiki",
-            func=lambda input_str: connector.search_wiki(
-                **eval(input_str) if isinstance(eval(input_str), dict) else {'search_text': input_str}
-            ),
-            description=(
-                "Get wiki search results. Input should be a Python dict string with keys: "
-                "search_text (required, string), top (optional, integer, default 50). "
-                "Example: \"{'search_text': 'installation guide', 'top': 20}\" or just \"'installation'\""
-            )
-        ),
+        # Tool(
+        #     name="search_wiki",
+        #     func=lambda input_str: connector.search_wiki(
+        #         **eval(input_str) if isinstance(eval(input_str), dict) else {'search_text': input_str}
+        #     ),
+        #     description=(
+        #         "Get wiki search results. Input should be a Python dict string with keys: "
+        #         "search_text (required, string), top (optional, integer, default 50). "
+        #         "Example: \"{'search_text': 'installation guide', 'top': 20}\" or just \"'installation'\""
+        #     )
+        # ),
         
-        Tool(
-            name="search_workitem",
-            func=lambda input_str: connector.search_workitem(
-                **eval(input_str) if isinstance(eval(input_str), dict) else {'search_text': input_str}
-            ),
-            description=(
-                "Get work item search results. Input should be a Python dict string with keys: "
-                "search_text (required, string), top (optional, integer, default 50). "
-                "Example: \"{'search_text': 'bug authentication', 'top': 20}\" or just \"'authentication'\""
-            )
-        ),
+        # Tool(
+        #     name="search_workitem",
+        #     func=lambda input_str: connector.search_workitem(
+        #         **eval(input_str) if isinstance(eval(input_str), dict) else {'search_text': input_str}
+        #     ),
+        #     description=(
+        #         "Get work item search results. Input should be a Python dict string with keys: "
+        #         "search_text (required, string), top (optional, integer, default 50). "
+        #         "Example: \"{'search_text': 'bug authentication', 'top': 20}\" or just \"'authentication'\""
+        #     )
+        # ),
         
         # ========== Core ==========
         Tool(
