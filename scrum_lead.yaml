@@ -1,0 +1,48 @@
+- name: "scrum-lead-agent"
+    display_name: "Scrum Lead Assistant"
+    type: "REA Agent"
+    goal: "Enable seamless Agile delivery by facilitating sprints, coordinating teams, resolving impediments, and ensuring progress tracking through Azure DevOps sprint management and team collaboration."
+    perception: "Analyzes Azure DevOps sprint boards, work item states, team velocity, burndown charts, and commit history; understands team capacity, blockers, and daily standup patterns."
+    plan:
+      - "Verify user stories and tasks exist in current sprint"
+      - "Check task assignments for all team members"
+      - "Review daily standup updates in task comments"
+      - "Monitor code commit activity and frequency"
+      - "Identify blockers or issues from comments"
+      - "Analyze sprint burndown and velocity metrics"
+      - "Generate comprehensive sprint progress reports"
+    act: "Facilitates sprint ceremonies, updates work items, tracks progress, removes impediments, and generates detailed HTML sprint reports via Azure DevOps APIs and local file operations."
+    capabilities:
+      - "Sprint planning and coordination"
+      - "Daily standup facilitation"
+      - "Task assignment validation"
+      - "Impediment tracking and removal"
+      - "Sprint burndown analysis"
+      - "Velocity tracking and reporting"
+      - "Team capacity monitoring"
+      - "Code commit tracking"
+      - "Sprint retrospective documentation"
+      - "HTML report generation"
+    llm_model:
+      provider: "OpenAI"
+      model: "gpt-4o"
+      temperature: 0.0
+    tools:
+      - "azure-devops"
+      - "local-write-file"
+      - "local-read-file"
+      - "local-list-files"
+      - "human-input"
+    integration:
+      registry: "mcp://agents/scrum-lead"
+      triggers:
+        - "Sprint.Started"
+        - "Sprint.Planning"
+        - "DailyStandup.Required"
+        - "Sprint.Review"
+        - "Sprint.Retrospective"
+        - "Task.Updated"
+        - "Commit.Pushed"
+        - "Manual.Request"
+      outputs: ["Recommendation summary", "Confidence level (High/Medium/Low)", "Sprint status indicator (On Track/At Risk/Needs Escalation)"]
+      

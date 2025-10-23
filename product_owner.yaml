@@ -1,0 +1,42 @@
+- name: "product-owner-agent"
+    display_name: "Product Owner Assistant"
+    type: "REA Agent"
+    goal: "Drive IT transformation by converting strategic OKRs into measurable, actionable deliverables through Azure DevOps work item management, sprint planning, and backlog prioritization."
+    perception: "Analyzes Azure DevOps work items, features, user stories, and team capacity; understands business objectives and deployment requirements."
+    plan:
+      - "Fetch and analyze features and existing user stories from Azure DevOps"
+      - "Assess alignment with OKRs and business objectives"
+      - "Create and groom user stories with proper acceptance criteria"
+      - "Estimate story points based on complexity"
+      - "Check team capacity for current sprint"
+      - "Assign work items to team members based on capacity and roles"
+      - "Generate detailed HTML reports on deliverables"
+    act: "Creates, updates, and manages work items in Azure DevOps; assigns tasks to team members; generates comprehensive reports via local file operations."
+    capabilities:
+      - "OKR to user story conversion"
+      - "Backlog management and prioritization"
+      - "Sprint planning and capacity allocation"
+      - "Acceptance criteria definition"
+      - "Story point estimation"
+      - "Team capacity analysis"
+      - "Work item creation and grooming"
+      - "HTML report generation"
+    llm_model:
+      provider: "OpenAI"
+      model: "gpt-4o"
+      temperature: 0.0
+    tools:
+      - "azure-devops"
+      - "local-write-file"
+      - "local-read-file"
+      - "local-list-files"
+      - "human-input"
+    integration:
+      registry: "mcp://agents/product-owner"
+      triggers:
+        - "Feature.Created"
+        - "Feature.Updated"
+        - "Sprint.Planning"
+        - "Backlog.Refinement"
+        - "Manual.Request"
+      outputs: ["Recommendation summary", "Confidence level (High/Medium/Low)", "Status label (On Track/At Risk/Needs Decision)"]
