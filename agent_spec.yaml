@@ -1,0 +1,206 @@
+- name: "code-review-agent"
+    display_name: "Code Review Assistant"
+    type: "MCP Client"
+    goal: "Perform static code analysis and suggest improvements for maintainability, performance, and security."
+    perception: "Analyzes GitHub PRs or AzDo Repos; understands context of changes."
+    plan:
+      - "Fetch code diff from repo"
+      - "Use LLM for review insights"
+      - "Comment or tag reviewer if issues found"
+    act: "Posts actionable comments or approvals via MCP/AzDo APIs."
+    capabilities:
+      - "Code smell detection"
+      - "Style and standards compliance"
+      - "LLM-assisted suggestions"
+    llm_model:
+      provider: "OpenAI"
+      model: "gpt-4o"
+      temperature: 0.0
+    tools:
+      - "pylint"
+      - "flake8"
+      - "mcp-azdo-client"
+    integration:
+      registry: "mcp://agents/code-review"
+      triggers:
+        - "PR.Created"
+        - "Commit.Pushed"
+      outputs: ["review_report", "comment_thread"]
+
+- name: "product-owner-agent"
+    display_name: "Product Owner Assistant"
+    type: "REA Agent"
+    goal: "Drive IT transformation by converting strategic OKRs into measurable, actionable deliverables through Azure DevOps work item management, sprint planning, and backlog prioritization."
+    perception: "Analyzes Azure DevOps work items, features, user stories, and team capacity; understands business objectives and deployment requirements."
+    plan:
+      - "Fetch and analyze features and existing user stories from Azure DevOps"
+      - "Assess alignment with OKRs and business objectives"
+      - "Create and groom user stories with proper acceptance criteria"
+      - "Estimate story points based on complexity"
+      - "Check team capacity for current sprint"
+      - "Assign work items to team members based on capacity and roles"
+      - "Generate detailed HTML reports on deliverables"
+    act: "Creates, updates, and manages work items in Azure DevOps; assigns tasks to team members; generates comprehensive reports via local file operations."
+    capabilities:
+      - "OKR to user story conversion"
+      - "Backlog management and prioritization"
+      - "Sprint planning and capacity allocation"
+      - "Acceptance criteria definition"
+      - "Story point estimation"
+      - "Team capacity analysis"
+      - "Work item creation and grooming"
+      - "HTML report generation"
+    llm_model:
+      provider: "OpenAI"
+      model: "gpt-4o"
+      temperature: 0.0
+    tools:
+      - "azure-devops"
+      - "local-write-file"
+      - "local-read-file"
+      - "local-list-files"
+      - "human-input"
+    integration:
+      registry: "mcp://agents/product-owner"
+      triggers:
+        - "Feature.Created"
+        - "Feature.Updated"
+        - "Sprint.Planning"
+        - "Backlog.Refinement"
+        - "Manual.Request"
+      outputs: ["Recommendation summary", "Confidence level (High/Medium/Low)", "Status label (On Track/At Risk/Needs Decision)"]
+
+- name: "scrum-lead-agent"
+    display_name: "Scrum Lead Assistant"
+    type: "REA Agent"
+    goal: "Enable seamless Agile delivery by facilitating sprints, coordinating teams, resolving impediments, and ensuring progress tracking through Azure DevOps sprint management and team collaboration."
+    perception: "Analyzes Azure DevOps sprint boards, work item states, team velocity, burndown charts, and commit history; understands team capacity, blockers, and daily standup patterns."
+    plan:
+      - "Verify user stories and tasks exist in current sprint"
+      - "Check task assignments for all team members"
+      - "Review daily standup updates in task comments"
+      - "Monitor code commit activity and frequency"
+      - "Identify blockers or issues from comments"
+      - "Analyze sprint burndown and velocity metrics"
+      - "Generate comprehensive sprint progress reports"
+    act: "Facilitates sprint ceremonies, updates work items, tracks progress, removes impediments, and generates detailed HTML sprint reports via Azure DevOps APIs and local file operations."
+    capabilities:
+      - "Sprint planning and coordination"
+      - "Daily standup facilitation"
+      - "Task assignment validation"
+      - "Impediment tracking and removal"
+      - "Sprint burndown analysis"
+      - "Velocity tracking and reporting"
+      - "Team capacity monitoring"
+      - "Code commit tracking"
+      - "Sprint retrospective documentation"
+      - "HTML report generation"
+    llm_model:
+      provider: "OpenAI"
+      model: "gpt-4o"
+      temperature: 0.0
+    tools:
+      - "azure-devops"
+      - "local-write-file"
+      - "local-read-file"
+      - "local-list-files"
+      - "human-input"
+    integration:
+      registry: "mcp://agents/scrum-lead"
+      triggers:
+        - "Sprint.Started"
+        - "Sprint.Planning"
+        - "DailyStandup.Required"
+        - "Sprint.Review"
+        - "Sprint.Retrospective"
+        - "Task.Updated"
+        - "Commit.Pushed"
+        - "Manual.Request"
+      outputs: ["Recommendation summary", "Confidence level (High/Medium/Low)", "Sprint status indicator (On Track/At Risk/Needs Escalation)"]
+      
+- name: "ui-testing-agent"
+    display_name: "UI Test Automation Assistant"
+    type: "MCP Client"
+    goal: "Automate end-to-end UI testing by generating test cases from user stories, executing tests via Playwright browser automation, and providing detailed test execution reports with quality evaluation."
+    perception: "Analyzes Azure DevOps user stories/tasks, inspects web page DOM structures, monitors test execution flow, and evaluates test coverage against acceptance criteria."
+    plan:
+      - "Retrieve user story/task from Azure DevOps by ID"
+      - "Parse requirements and identify target URLs"
+      - "Navigate to web pages and inspect DOM for stable selectors"
+      - "Generate Cucumber feature files with test scenarios"
+      - "Create step definition files using Playwright"
+      - "Execute test scenarios and capture results"
+      - "Generate HTML test execution reports"
+      - "Run critic evaluation to validate test coverage and quality"
+    act: "Connects to Playwright MCP server for browser automation; generates test artifacts (feature files, step definitions); executes UI tests; creates comprehensive HTML reports; performs quality evaluations via Azure DevOps integration."
+    capabilities:
+      - "Azure DevOps work item retrieval and analysis"
+      - "Browser automation via Playwright MCP"
+      - "DOM inspection and selector generation"
+      - "Cucumber feature file generation"
+      - "Playwright step definition creation"
+      - "Test execution and validation"
+      - "HTML report generation"
+      - "Test coverage and quality evaluation"
+      - "Requirement traceability analysis"
+    llm_model:
+      provider: "OpenAI"
+      model: "gpt-4o"
+      temperature: 0.0
+    agents:
+      testing_agent:
+        role: "Test case generator and executor"
+        responsibilities:
+          - "Generate test cases from user stories"
+          - "Create feature and step definition files"
+          - "Execute browser automation tests"
+          - "Produce test result reports"
+        tools:
+          - "playwright-mcp"
+          - "GetAzureDevOpsWorkItems"
+          - "write_create_file"
+          - "read_file"
+          - "list_files"
+      critic_agent:
+        role: "Quality evaluator and test critic"
+        responsibilities:
+          - "Analyze test execution logs"
+          - "Compare tests against requirements"
+          - "Evaluate test coverage completeness"
+          - "Identify gaps and issues"
+          - "Generate evaluation reports"
+        tools:
+          - "GetAzureDevOpsWorkItems"
+          - "write_create_file"
+          - "read_file"
+    tools:
+      - playwright_mcp:
+        server: "@playwright/mcp@latest"
+        connection: "stdio"
+        capabilities:
+          - "playwright-navigate"
+          - "playwright-click"
+          - "playwright-fill"
+          - "playwright-evaluate"
+          - "playwright-screenshot"
+          - "playwright-console"
+          - "playwright-hover"
+          - "playwright-select"
+      - azure_devops:
+        - "GetAzureDevOpsWorkItems"
+      - local_filesystem:
+        - "write_create_file"
+        - "read_file"
+        - "list_files"
+    integration:
+      registry: "mcp://agents/ui-testing"
+      triggers:
+        - "UserStory.Created"
+        - "UserStory.Updated"
+        - "Task.ReadyForTesting"
+        - "Manual.Request"
+      mcp_server:
+        protocol: "stdio"
+        command: "npx"
+        args: ["@playwright/mcp@latest"]
+      outputs: ["*.feature", "*step.js", "test_results.html", "evaluation.html", "agent_thoughts.log"]
