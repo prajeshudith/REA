@@ -563,3 +563,24 @@ OUTPUT:
 CRITICAL RULE
 ALWAYS respond with ONLY the JSON object. No additional text before or after.
 """
+
+json_creation_prompt = """
+You are given with a agent logs which contains all the intermediate steps and final response of an agent execution.
+Your task is to create a JSON which should contain all the steps and very short description of each step.
+
+Agent Logs:
+{agent_logs}
+
+Example Output:
+```json
+{{
+   "Requirements Processed": "XYZ requirements are processed",
+   "User Stories Created": "User stories A, B, C created under feature id 18",
+   "Tasks Created": "Tasks D, E, F created under respective user stories",
+   "User Stories Prioritized": "User stories A and B prioritized as High, C as Medium",
+   "Team Capacity Checked": "",
+   ..
+   ..
+}}
+```
+"""
