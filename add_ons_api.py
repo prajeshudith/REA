@@ -4,19 +4,28 @@ import json
 
 app = FastAPI()
 
+json_paths = {
+    "product owner": "product owner_agent_steps.json"
+}
+
+status_paths = {
+    "product owner": "agent_started.txt"
+}
+
 @app.get("/status")
-def get_status():
-    if os.path.exists("agent_started.txt"):
-        return {"status": "running"}
-    else:
+def get_status(agent_name: str):
+    try:
+        path = status_paths[agent_name]
+        if os.path.exists(path):
+            return {"status": "running"}
+        else:
+            return {"status": "stopped"}
+    except:
         return {"status": "stopped"}
 
 # To run: uvicorn main:app --reload
 # Test: http://localhost:8000/search?path=/your/file/path
 
-json_paths = {
-    "product owner": "product owner_agent_steps.json"
-}
 
 @app.get("/json")
 def steps(agent_name: str):
